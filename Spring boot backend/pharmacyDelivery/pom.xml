@@ -71,6 +71,14 @@
 			<version>2.3.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/io.github.cdimascio/java-dotenv -->
+		<dependency>
+			<groupId>me.paulschwarz</groupId>
+			<artifactId>spring-dotenv</artifactId>
+			<version>LATEST</version>
+		</dependency>
+
+
 
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
