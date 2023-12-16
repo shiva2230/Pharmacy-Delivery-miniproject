@@ -9,8 +9,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -84,9 +86,10 @@ class PrescriptionActivity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
-            // Request multiple permissions dynamically
+            val intent = Intent(this@PrescriptionActivity, UploadSuccessActivity::class.java)
             requestPermissions()
             Log.d("success","submitted")
+            startActivity(intent)
         }
     }
 
@@ -103,6 +106,13 @@ class PrescriptionActivity : AppCompatActivity() {
                     selectedImageUri = it
                     Log.d("ImageSelection", "Selected Image URI: $selectedImageUri")
                     previewImage.setImageURI(selectedImageUri)
+                    if (previewImage.getVisibility() == View.INVISIBLE) {
+                        previewImage.setVisibility(View.VISIBLE);
+                        submitButton.setVisibility(View.VISIBLE);
+                    } else {
+                        previewImage.setVisibility(View.INVISIBLE);
+                        submitButton.setVisibility(View.INVISIBLE);
+                    }
                 } ?: run {
                     Log.d("ImageSelection", "No image selected")
                 }
