@@ -16,7 +16,12 @@
     "dotenv": "^16.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.18.0"
+    "react-image-gallery": "^1.3.0",
+    "react-router-dom": "^6.18.0",
+    "react-zoom-pan-pinch": "^3.3.0",
+    "sockjs-client": "^1.5.0",
+    "stomp-js": "^0.1.3",
+    "stompjs": "^2.3.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

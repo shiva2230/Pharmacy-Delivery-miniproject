@@ -1,0 +1,39 @@
+/* styles.css (or your preferred CSS file) */
+
+.app-container {
+    display: flex;
+  }
+  
+  .top-bar {
+    background-color: #3498db;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .sidebar {
+    width: 200px;
+    background-color: #2c3e50;
+    padding-top: 20px;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar nav li {
+    margin-bottom: 10px;
+  }
+  
+  .sidebar nav a {
+    text-decoration: none;
+    color: #ecf0f1;
+    font-size: 16px;
+  }
+  
+  .sidebar nav a:hover {
+    color: #3498db;
+  }
+  

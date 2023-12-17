@@ -1,0 +1,42 @@
+/* Sidebar.css */
+
+.sidebar {
+  width: 200px;
+  height: 100%;
+  background-color: #333;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 50px;
+  transition: width 0.3s; /* Add smooth transition effect for width changes */
+}
+
+.sidebar:hover {
+  width: 220px; /* Expand the width on hover */
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  padding: 10px;
+  text-align: center;
+  transition: background-color 0.3s; /* Add smooth transition effect for background color changes */
+}
+
+.sidebar nav ul li:hover {
+  background-color: #555; /* Change background color on hover */
+}
+
+.sidebar nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.main-content {
+  margin-left: 220px;
+  padding: 20px;
+}

@@ -1,0 +1,45 @@
+.show-prescription-container {
+    max-width: 800px;
+    margin: 10px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Adjust styles for the zoom-pan-pinch container */
+  .zoom-pan-pinch-container {
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+  }
+  
+  /* Customize styles for the zoom-pan-pinch image */
+  .zoom-pan-pinch-image {
+    max-width: 100%;
+    max-height: 100%;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    display: block;
+    margin: auto;
+  }
+  
+  /* Customize styles for the thumbnail bar (if applicable) */
+  .image-gallery-thumbnails-container {
+    position: relative;
+    margin-top: 15px;
+  }
+  
+  .image-gallery-thumbnail {
+    width: 80px;
+    height: 60px;
+    border: 2px solid #ddd;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .image-gallery-thumbnail.active {
+    border-color: #3498db;
+  }
+  

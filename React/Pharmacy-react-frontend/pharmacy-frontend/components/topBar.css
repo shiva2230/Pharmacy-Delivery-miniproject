@@ -1,0 +1,27 @@
+/* TopBar.css */
+
+.top-bar {
+  background-color: #0a2638;
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
+
+  /* Add a gradient background for a more dynamic look */
+  background: linear-gradient(to right, #3498db, #6c5ce7);
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 1px; /* Add letter-spacing for better readability */
+  font-weight: bold; /* Make the text bold */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a subtle text shadow */
+}
+
+/* Add hover effect for a subtle interaction */
+.top-bar:hover {
+  background-color: #102e43;
+}
+
+/* You can customize the styles further based on your design preferences */
