@@ -11,7 +11,6 @@ const HeaderComponent = () => {
         <ul>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/about">About</Link></li>
-          {/* Add more menu items as needed */}
         </ul>
       </nav>
     </div>

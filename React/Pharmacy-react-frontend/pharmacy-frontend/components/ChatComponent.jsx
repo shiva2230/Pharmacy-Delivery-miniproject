@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import SockJS from 'sockjs-client';
 import "./init"
+import React, { useEffect, useState } from 'react'
 import {over} from 'stompjs';
+import SockJS from 'sockjs-client';
+import "./ChatComponent.css";
 
 var stompClient =null;
 const ChatComponent = () => {
-    const [privateChats, setPrivateChats] = useState(new Map());     
-    const [publicChats, setPublicChats] = useState([]); 
-    const [tab,setTab] =useState("CHATROOM");
-    const [userData, setUserData] = useState({
-        username: '',
-        receivername: '',
-        connected: false,
-        message: ''
-      });
-    useEffect(() => {
-      console.log(userData);
-    }, [userData]);
+  const [privateChats, setPrivateChats] = useState(new Map());
+  const [publicChats, setPublicChats] = useState([]);
+  const [tab, setTab] = useState("CHATROOM");
+  const [userData, setUserData] = useState({
+    username: "You", 
+    receivername: "",
+    connected: false,
+    message: "",
+  });
 
-    const connect =()=>{
-        let Sock = new SockJS('http://localhost:8080/ws');
-        stompClient = over(Sock);
-        stompClient.connect({},onConnected, onError);
-    }
+  useEffect(() => {
+    
+    connect();
+  }, []);
+
+  const connect = () => {
+    let Sock = new SockJS("http://localhost:8080/ws");
+    stompClient = over(Sock);
+    stompClient.connect({}, onConnected, onError);
+  };
 
     const onConnected = () => {
         setUserData({...userData,"connected": true});
@@ -118,66 +121,124 @@ const ChatComponent = () => {
         connect();
     }
     return (
-    <div className="container">
-        {userData.connected?
-        <div className="chat-box">
+      <div className="container">
+        {userData.connected ? (
+          <div className="chat-box">
             <div className="member-list">
-                <ul>
-                    <li onClick={()=>{setTab("CHATROOM")}} className={`member ${tab==="CHATROOM" && "active"}`}>Chatroom</li>
-                    {[...privateChats.keys()].map((name,index)=>(
-                        <li onClick={()=>{setTab(name)}} className={`member ${tab===name && "active"}`} key={index}>{name}</li>
-                    ))}
-                </ul>
+              <ul>
+                <li
+                  onClick={() => {
+                    setTab("CHATROOM");
+                  }}
+                  className={`member ${tab === "CHATROOM" && "active"}`}
+                >
+                  Chatroom
+                </li>
+                {[...privateChats.keys()].map((name, index) => (
+                  <li
+                    onClick={() => {
+                      setTab(name);
+                    }}
+                    className={`member ${tab === name && "active"}`}
+                    key={index}
+                  >
+                    {name}
+                  </li>
+                ))}
+              </ul>
             </div>
-            {tab==="CHATROOM" && <div className="chat-content">
+            {tab === "CHATROOM" && (
+              <div className="chat-content">
                 <ul className="chat-messages">
-                    {publicChats.map((chat,index)=>(
-                        <li className={`message ${chat.senderName === userData.username && "self"}`} key={index}>
-                            {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
-                            <div className="message-data">{chat.message}</div>
-                            {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
-                        </li>
-                    ))}
+                  {publicChats.map((chat, index) => (
+                    <li
+                      className={`message ${chat.senderName === userData.username && "self"}`}
+                      key={index}
+                    >
+                      {chat.senderName !== userData.username && (
+                        <div className="avatar">{chat.senderName}</div>
+                      )}
+                      <div className="message-data">{chat.message}</div>
+                      {chat.senderName === userData.username && (
+                        <div className="avatar self">{chat.senderName}</div>
+                      )}
+                    </li>
+                  ))}
                 </ul>
-
+  
                 <div className="send-message">
-                    <input type="text" className="input-message" placeholder="enter the message" value={userData.message} onChange={handleMessage} /> 
-                    <button type="button" className="send-button" onClick={sendValue}>send</button>
+                  <input
+                    type="text"
+                    className="input-message"
+                    placeholder="enter the message"
+                    value={userData.message}
+                    onChange={handleMessage}
+                  />
+                  <button
+                    type="button"
+                    className="send-button"
+                    onClick={sendValue}
+                  >
+                    Send
+                  </button>
                 </div>
-            </div>}
-            {tab!=="CHATROOM" && <div className="chat-content">
+              </div>
+            )}
+            {tab !== "CHATROOM" && (
+              <div className="chat-content">
                 <ul className="chat-messages">
-                    {[...privateChats.get(tab)].map((chat,index)=>(
-                        <li className={`message ${chat.senderName === userData.username && "self"}`} key={index}>
-                            {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
-                            <div className="message-data">{chat.message}</div>
-                            {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
-                        </li>
-                    ))}
+                  {[...privateChats.get(tab)].map((chat, index) => (
+                    <li
+                      className={`message ${chat.senderName === userData.username && "self"}`}
+                      key={index}
+                    >
+                      {chat.senderName !== userData.username && (
+                        <div className="avatar">{chat.senderName}</div>
+                      )}
+                      <div className="message-data">{chat.message}</div>
+                      {chat.senderName === userData.username && (
+                        <div className="avatar self">{chat.senderName}</div>
+                      )}
+                    </li>
+                  ))}
                 </ul>
-
+  
                 <div className="send-message">
-                    <input type="text" className="input-message" placeholder="enter the message" value={userData.message} onChange={handleMessage} /> 
-                    <button type="button" className="send-button" onClick={sendPrivateValue}>send</button>
+                  <input
+                    type="text"
+                    className="input-message"
+                    placeholder="enter the message"
+                    value={userData.message}
+                    onChange={handleMessage}
+                  />
+                  <button
+                    type="button"
+                    className="send-button"
+                    onClick={sendPrivateValue}
+                  >
+                    Send
+                  </button>
                 </div>
-            </div>}
-        </div>
-        :
-        <div className="register">
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="register">
             <input
-                id="user-name"
-                placeholder="Enter your name"
-                name="userName"
-                value={userData.username}
-                onChange={handleUsername}
-                margin="normal"
-              />
-              <button type="button" onClick={registerUser}>
-                    connect
-              </button> 
-        </div>}
-    </div>
-    )
-}
+              id="user-name"
+              placeholder="Enter your name"
+              name="userName"
+              value={userData.username}
+              onChange={handleUsername}
+              margin="normal"
+            />
+            <button type="button" onClick={registerUser}>
+              connect
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
 export default ChatComponent

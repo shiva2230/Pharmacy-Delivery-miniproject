@@ -11,9 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "login")
-public class Login {
-
+@Table(name = "presc_images")
+public class PrescriptionImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,9 +23,9 @@ public class Login {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "pass")
-    private String pass;
-
     @Column(name = "email")
     private String email;
+
+    @Column(name = "image_ref")
+    private String imageRef;
 }

@@ -9,10 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
+public class PrescriptionImageDto{
     private Long id;
     private String logNo;
     private String name;
-    private String pass;
     private String email;
+    private String imageRef;
 }
+
+

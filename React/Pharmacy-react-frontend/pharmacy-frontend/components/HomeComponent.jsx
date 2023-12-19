@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './HomeComponent.css'; // Import your CSS file for styling
+import './HomeComponent.css'; 
 const AWS = window.AWS;
 
 const HomeComponent = () => {
@@ -40,12 +40,12 @@ const HomeComponent = () => {
   };
 
   const handleImageClick = (imageKey) => {
-    // Redirect to ShowPrescriptionComponent with the selected imageKey
-    navigate(`/ImagePreviewComponent/${imageKey}`);
+    
+    navigate(`/PrescriptionContainer/${imageKey}`);
       console.log({imageKey})
 
   };
-  // console.log({imageKey})
+  
 
   return (
     <div className="prescription-container">

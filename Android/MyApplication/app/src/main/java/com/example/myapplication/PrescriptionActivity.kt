@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -45,28 +46,23 @@ class PrescriptionActivity : AppCompatActivity() {
                 Log.d("PermissionStatus", "${it.key}: $status")
             }
 
-            // Continue with your logic after handling permissions
-            // For example, you can check if READ_EXTERNAL_STORAGE is granted here
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                // Continue with your logic that requires READ_EXTERNAL_STORAGE
-                // This part of the code will be executed if the permission is granted
+
                 Log.d("PermissionStatus", "READ_EXTERNAL_STORAGE: ENABLED")
             }
 
-            // Check if media permissions are granted here
             if (permissions[Manifest.permission.READ_MEDIA_IMAGES] == true &&
                 permissions[Manifest.permission.READ_MEDIA_VIDEO] == true &&
                 permissions[Manifest.permission.READ_MEDIA_AUDIO] == true
             ) {
-                // Continue with your logic that requires media permissions
                 Log.d("PermissionStatus", "Media permissions: ENABLED")
                 uploadPrescription(selectedImageUri)
             } else {
-                // Handle the case where not all media permissions are granted
+
                 Log.d("PermissionStatus", "Media permissions: DISABLED")
             }
         }
@@ -86,7 +82,7 @@ class PrescriptionActivity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
-            val intent = Intent(this@PrescriptionActivity, UploadSuccessActivity::class.java)
+            val intent = Intent(this@PrescriptionActivity, ChatActivity::class.java)
             requestPermissions()
             Log.d("success","submitted")
             startActivity(intent)
@@ -101,7 +97,6 @@ class PrescriptionActivity : AppCompatActivity() {
     private val pickImageLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                // Properly set the selectedImageUri
                 result.data?.data?.let {
                     selectedImageUri = it
                     Log.d("ImageSelection", "Selected Image URI: $selectedImageUri")
@@ -140,13 +135,12 @@ class PrescriptionActivity : AppCompatActivity() {
             )
             uploadPrescription(selectedImageUri)
         } else {
-            // All permissions are already granted
             uploadPrescription(selectedImageUri)
         }
     }
 
     private fun uploadPrescription(uri: android.net.Uri?) {
-        Log.d("upload","uploadPrescription")
+        Log.d("upload", "uploadPrescription")
         selectedImageUri?.let { selectedUri ->
             val realPath = getRealPathFromURI(selectedUri)
             if (realPath.isNotBlank()) {
@@ -154,21 +148,26 @@ class PrescriptionActivity : AppCompatActivity() {
                 if (file.exists()) {
                     Log.d("Success", "File exists")
                     val requestFile =
-                        RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
                     val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-                    Log.d("content",body.toString())
-                    apiService.uploadImage(body)?.enqueue(object : Callback<String?> {
+
+                    val logNo = intent.getStringExtra("LogNo")
+                    val logNoRequestBody =
+                        logNo?.let { RequestBody.create("text/plain".toMediaTypeOrNull(), it) }
+
+                    apiService.uploadImage(body, logNoRequestBody)?.enqueue(object : Callback<String?> {
                         override fun onResponse(
                             call: Call<String?>,
                             response: Response<String?>
                         ) {
                             if (response.isSuccessful) {
-                                val message = response.body()
+                                var message = response.body()
+
                                 Log.d("Success", "Pharmacy created successfully")
                                 Log.d("message:", message.toString())
                             } else {
                                 Log.d("Failure", "Empty")
-                                Log.d("response:",response.body().toString())
+                                Log.d("response:", response.body().toString())
                             }
                         }
 
@@ -177,6 +176,7 @@ class PrescriptionActivity : AppCompatActivity() {
                             Log.e("failure description", t.message.toString())
                         }
                     })
+
                 } else {
                     Log.d("Failure", "File does not exist")
                 }
@@ -187,6 +187,7 @@ class PrescriptionActivity : AppCompatActivity() {
             Log.d("Failure", "No image selected")
         }
     }
+
 
     private fun getRealPathFromURI(uri: android.net.Uri): String {
         var path = ""

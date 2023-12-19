@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Gallery from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css'; // Import the styles
-import './ImagePreviewComponent.css'; // Import your additional CSS file
+import 'react-image-gallery/styles/css/image-gallery.css';
+import './ImagePreviewComponent.css'; 
 const AWS = window.AWS;
 
 const ImagePreviewComponent = () => {
@@ -27,14 +27,14 @@ const ImagePreviewComponent = () => {
       if (err) {
         console.error(err);
       } else {
-        // Create a blob URL for the image data
+        
         const blob = new Blob([data.Body], { type: data.ContentType });
         const imageUrl = URL.createObjectURL(blob);
         setImages([{ original: imageUrl, thumbnail: imageUrl }]);
       }
     });
 
-    // Cleanup the blob URL when the component unmounts
+    
     return () => {
       if (images.length > 0) {
         URL.revokeObjectURL(images[0].original);

@@ -16,11 +16,11 @@
   padding: 15px;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.3s ease; /* Add transition for smooth scaling */
+  transition: transform 0.3s ease; 
 }
 
 .prescription-item:hover {
-  transform: scale(1.1); /* Scale up on hover */
+  transform: scale(1.1); 
 }
 
 .prescription-details {
@@ -38,7 +38,7 @@
 }
 
 .zoom-container {
-  display: none; /* Hide by default */
+  display: none; 
   position: fixed;
   top: 0;
   left: 0;
@@ -50,7 +50,7 @@
 }
 
 .zoom-container.active {
-  display: flex; /* Show when active */
+  display: flex; 
 }
 
 .zoomed-image {
