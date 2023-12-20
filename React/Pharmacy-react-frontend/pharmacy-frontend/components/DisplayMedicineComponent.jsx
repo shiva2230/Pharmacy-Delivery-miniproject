@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import './DisplayMedicineComponent.css';
 
 const DisplayMedicineComponent = () => {
   const { medicineDetails } = useParams();
@@ -7,6 +8,13 @@ const DisplayMedicineComponent = () => {
   const [prescriptionData, setPrescriptionData] = useState([]);
   const [customerInfo, setCustomerInfo] = useState({});
   const [emailSent, setEmailSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [expandedMedicine, setExpandedMedicine] = useState(null);
+
+  const stripHtmlTags = (htmlString) => {
+    const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+    return doc.body.textContent || "";
+  };
 
   useEffect(() => {
     const fetchPrescriptionData = async () => {
@@ -33,14 +41,13 @@ const DisplayMedicineComponent = () => {
 
     const fetchCustomerInfo = async () => {
       try {
-        
         const imageRef = '1702984882635_image-34.jpg';
         const response = await fetch(
           `http://localhost:8080/api/prescription-images/${imageRef}`
         );
         if (response.ok) {
           const data = await response.json();
-          setCustomerInfo(data); 
+          setCustomerInfo(data);
         } else {
           console.error('Error in API response:', response.status, response.statusText);
         }
@@ -55,24 +62,41 @@ const DisplayMedicineComponent = () => {
 
   const sendEmail = async () => {
     try {
+      setLoading(true); // Set loading to true when starting to send email
       const response = await fetch('http://localhost:8080/api/email/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          to: customerInfo.email, 
-          subject: 'Prescription Details',
-          body: `
-            Prescription Details:
-            Medicines: ${prescriptionData.map((prescription) => prescription.medicineName).join(', ')}
+          to: customerInfo.email,
+          subject: 'Order Confirmation',
+          body: stripHtmlTags(`
+            Your Order Was Successfully Placed!
+  
+            Thank you for placing an order with us. Below are the details of your prescription:
+  
+            ${prescriptionData.map((prescription, index) => `
+              Medicine Name: ${prescription.medicineName}
+              Quantity: ${medicineDropdowns[index].quantity}
+              MRP: ${prescription.mrp}
+              
+              ${prescription.usage && `Usage: ${prescription.usage}`}
+              ${prescription.sideEffects && `Side Effects: ${prescription.sideEffects}`}
+              ${prescription.howToUse && `How to Use: ${prescription.howToUse}`}
+              ${prescription.howItWorks && `How It Works: ${prescription.howItWorks}`}
+  
+              ${index < prescriptionData.length - 1 ? '---------------------------------------' : ''}
+            `).join('')}
+            
             Total Price: ${calculateTotalPrice()}
-            Customer Name: ${customerInfo.name}
-            Customer Email: ${customerInfo.email}
-          `,
+  
+            For more details about each medicine, please visit our website.
+            Thank you for choosing our service!
+          `),
         }),
       });
-
+  
       if (response.ok) {
         setEmailSent(true);
       } else {
@@ -80,18 +104,23 @@ const DisplayMedicineComponent = () => {
       }
     } catch (error) {
       console.error('Error sending email:', error);
+    } finally {
+      setLoading(false); // Set loading back to false when email sending is done
     }
   };
 
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     prescriptionData.forEach((prescription, index) => {
-      
-      const mrp = parseFloat(prescription.mrp.replace(/[^\d.]/g, '')); 
+      const mrp = parseFloat(prescription.mrp.replace(/[^\d.]/g, ''));
       const quantity = medicineDropdowns[index].quantity;
       totalPrice += mrp * quantity;
     });
     return totalPrice;
+  };
+
+  const toggleExpandedMedicine = (index) => {
+    setExpandedMedicine((prevIndex) => (prevIndex === index ? null : index));
   };
 
   return (
@@ -105,6 +134,22 @@ const DisplayMedicineComponent = () => {
             <strong>Quantity:</strong> {medicineDropdowns[index].quantity}
             <br />
             <strong>MRP:</strong> {prescription.mrp}
+            <br />
+            <button
+              className="details-button"
+              onClick={() => toggleExpandedMedicine(index)}
+            >
+              {expandedMedicine === index ? 'Hide Details' : 'Show More Details ▼'}
+            </button>
+            {expandedMedicine === index && (
+              <div className="medicine-details">
+                {/* Additional information for the expanded medicine */}
+                <p>Usage: {prescription.usage}</p>
+                <p>Side Effects: {prescription.sideEffects}</p>
+                <p>How to Use: {prescription.howToUse}</p>
+                <p>How It Works: {prescription.howItWorks}</p>
+              </div>
+            )}
             <hr />
           </li>
         ))}
@@ -118,8 +163,8 @@ const DisplayMedicineComponent = () => {
         <strong>Email:</strong> {customerInfo.email}
       </p>
 
-      <button onClick={sendEmail} disabled={emailSent}>
-        {emailSent ? 'Email Sent' : 'Send Email'}
+      <button onClick={sendEmail} disabled={emailSent || loading}>
+        {loading ? 'Sending Email...' : (emailSent ? 'Email Sent' : 'Send Email')}
       </button>
     </div>
   );

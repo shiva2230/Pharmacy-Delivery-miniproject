@@ -1,0 +1,42 @@
+/* DisplayMedicineComponent.css */
+
+.details-button {
+    background: none;
+    border: none;
+    color: #007BFF;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .details-button:hover {
+    color: #0056b3;
+  }
+  
+  .medicine-details {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Additional styles for aesthetics */
+  h2 {
+    color: #007BFF;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    margin-bottom: 20px;
+  }
+  
+  strong {
+    color: #333;
+  }
+  
